@@ -10,6 +10,7 @@ function CambiaImagen() {
   const cambiarImagen = () => {
 
     //! Cambia la URL de la imagen según el valor actual (Arrow Function) 
+    //! : es un operador ternario 
     setImagenActual(Imagen =>  Imagen === lamboActual ? lamboNueva : lamboActual);
   };
 
@@ -20,7 +21,7 @@ function CambiaImagen() {
         alt="Imagen actual" 
         style={{ width: '500px', height: 'auto', borderRadius: '500px' }} 
       />
-      <button onClick={cambiarImagen}>Click para cambiar de imagen</button>
+      <button onClick={cambiarImagen} style={{ backgroundColor: 'gray', color: 'white',padding: '10px 20px',border: 'none',borderRadius: '5px',cursor: 'pointer',fontSize: '16px'}}>Click aqui</button>
     </div>
   );
 }

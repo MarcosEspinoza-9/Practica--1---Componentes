@@ -19,7 +19,9 @@ function CambiaColorFondo() {
     <div
       style={{ backgroundColor: fondo, padding: "20px", borderRadius: "5px",  width: "50%"}}
     >
-      <button onClick={cambiarColorFondo}>Cambiar color de fondo</button>
+      <button onClick={cambiarColorFondo}
+      style={{ backgroundColor: 'gray', color: 'white',padding: '10px 20px',border: 'none',borderRadius: '5px',cursor: 'pointer',fontSize: '16px'}}
+      >Cambiar color de fondo</button>
     </div>
   );
 }

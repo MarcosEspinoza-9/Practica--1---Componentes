@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="App" id='contenedor'>
       <Titulo mensaje="Bienvenido al mundo React!" 
-              style= {{ fontFamily: 'verdana (sans-serif) ', fontSize: '6px', color: 'green ' }}
+              style= {{ fontFamily: 'Arial ', fontSize: '20px', color: 'green'}}
       />
       <Parrafo texto="Esto es un parrafo"
                style= {{fontFamily: 'Georgia', fontSize: '5px', color: 'gray'}}
@@ -27,7 +27,7 @@ function App() {
       <ImagenBoton/>
       <BackroundColor/>
       <SaludoPersonalizado/>
-      
+
     </div>
   );
 }
