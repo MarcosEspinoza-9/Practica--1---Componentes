@@ -6,6 +6,8 @@ import Boton from './components/Boton';
 import ImagenBoton from './components/ImagenBoton';
 import BackroundColor from './components/BackgroundColor';
 import SaludoPersonalizado from './components/SaludoPersonalizado';
+import Toats from './components/Toats';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
@@ -26,7 +28,8 @@ function App() {
       <Boton/>  
       <ImagenBoton/>
       <BackroundColor/>
-      <SaludoPersonalizado/>
+      {/* <SaludoPersonalizado/> */}
+      <Toats/>
 
     </div>
   );
