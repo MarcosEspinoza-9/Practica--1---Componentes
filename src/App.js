@@ -10,7 +10,10 @@ import Toats from './components/Toats';
 import Modal from './components/Modal';
 import Carousel from './components/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Table from './components/Table';
 import './App.css';
+
+
 
 function App() {
   return (
@@ -34,7 +37,7 @@ function App() {
       <Toats/>
       <Modal/>
       <Carousel/>
-
+      <Table/>
     </div>
   );
 }
