@@ -11,6 +11,7 @@ import Modal from './components/Modal';
 import Carousel from './components/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from './components/Table';
+import FormularioDeRegistro from './components/FormularioDeRegistro';
 import './App.css';
 
 
@@ -18,6 +19,9 @@ import './App.css';
 function App() {
   return (
     <div className="App" id='contenedor'>
+
+       <FormularioDeRegistro/>
+
       {/* <Titulo mensaje="Bienvenido al mundo React!" 
               style= {{ fontFamily: 'Arial ', fontSize: '20px', color: 'green'}}
       /> */}
@@ -34,10 +38,12 @@ function App() {
       {/* <ImagenBoton/> */}
       {/* <BackroundColor/> */}
       {/* <SaludoPersonalizado/> */}
-      <Toats/>
-      <Modal/>
-      <Carousel/>
-      <Table/>
+      {/* <Toats/> */}
+      {/* <Modal */}
+        {/* id= "modal"       */}
+      {/* /> */}
+      {/* <Carousel/> */}
+      {/* <Table/> */}
     </div>
   );
 }

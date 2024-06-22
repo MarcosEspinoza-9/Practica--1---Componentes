@@ -4,6 +4,7 @@ import { Button, Toast, ToastBody, ToastHeader } from "reactstrap";
 function ToastComponent() {
     const [mostrarToast, setMostrarToast] = useState(false);
   
+    //! Arrow function para mostrar el estado contrario a lo que se inicializo y viseversa
     const mostrar = () => setMostrarToast(!mostrarToast);
   
     return (

@@ -1,62 +1,88 @@
-import React from "react";
-import { Table, Button } from "reactstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; //! libreria
-import { faUser } from "@fortawesome/free-solid-svg-icons";
+import React, { useEffect, useState } from "react";
+import { Table } from "reactstrap";
+import data from "../data/data.json"; //! Importa el archivo JSON
+import urlImagen from "../data/urlImagen.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {faCoffee,faAppleAlt,faAnchor,faBell,faBicycle,faCar,faCloud,faCogs, faDice,faDog,faDragon,faFeather,faFish,faFlask,faGamepad, faGuitar,faHeart,faHome,faLeaf,faLemon} from "@fortawesome/free-solid-svg-icons";
 
-// import { faCoffee } from '@fortawesome/free-solid-svg-icons';
-function tablita() {
+//! OBJETO PARA MAPEAR LOS NOMBRES DE LOS ICONOS
+const iconMap = {faCoffee,faAppleAlt,faAnchor,faBell, faBicycle,faCar,faCloud,faCogs,faDice, faDog, faDragon,faFeather,faFish, faFlask,faGamepad,faGuitar,faHeart,faHome,faLeaf,faLemon};
+
+//! INICIALIZO EL ARREGLO VACIO
+const DataTable = () => {
+  const [tableData, setTableData] = useState([]);
+  const [UrlImagen, setUrlImagen] = useState([]);
+  const [modal, setModal] = useState(false);
+
+  const toggle = () => setModal(!modal);
+
+  useEffect(() => {
+    setUrlImagen(urlImagen);
+  }, )
+  
+
+
+  //! OBTENER DATOS  POR MEDIO DE USEEFFECT. DESPUES RENDERIZA 
+  useEffect(() => {
+    setTableData(data);
+  });
+
   return (
     <div>
-      <Table bordered hover size="xl">
+      <h1>Dinamic Table</h1>
+      <Table striped>
         <thead>
           <tr>
             <th>#</th>
-            <th>
-              First Name <FontAwesomeIcon icon={faUser} />{" "}
-            </th>
-            <th>Last Name</th>
-            <th>Username</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Icono</th>
+            <th>Button</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>Otto</td>
-            <td>@mdo</td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>Thornton</td>
-            <td>@fat</td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@facebook</td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@whatsapp</td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td>Larry</td>
-            <td>the Bird</td>
-            <td>@twitter</td>
-          </tr>
-          <tr>
-          <td colSpan="3" className="text-end"  > </td>{/* //! Alineación del botón a la derecha usando bootsrap */}
-          <Button color="secondary">Click aqui</Button>
-          </tr>
-        </tbody>
+        <tbody> 
+          {/* //! Map pasa los elementos del array (tableData "vacio"), en uno nuevo llamado item */}
+          {tableData.map((item) => (
+              <tr key={item.id}>
+              <th>{item.id}</th>
+              <td>{item.nombre}</td>
+              <td>{item.apellido}</td>
+              <td>
+                <FontAwesomeIcon icon={iconMap[item.icono]} />
+              </td>
+              <td> 
+              <Button color="info" onClick={toggle}>Show Image</Button>
+              </td>
+            </tr>
+          ))}
+           </tbody>
       </Table>
+
+      <Modal isOpen={modal} toggle={toggle} >
+        <ModalHeader toggle={toggle}>Modal title</ModalHeader>
+         <ModalBody> {/* //! Imagen Statica */}
+        {/* <img alt="Sample"src="https://picsum.photos/300/200"/> */}
+        {UrlImagen.map (item2 => (    
+             
+           <img alt="Sample" src={item2.uri} />
+          
+  
+          ))}
+
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={toggle}>
+            Save
+          </Button>
+          <Button color="secondary" onClick={toggle}>
+            Cancel
+          </Button>
+        </ModalFooter>
+      </Modal>
+
     </div>
   );
-}
+};
 
-export default tablita;
+export default DataTable;
