@@ -12,6 +12,7 @@ import Carousel from './components/Carousel';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from './components/Table';
 import FormularioDeRegistro from './components/FormularioDeRegistro';
+import Form from './components/Form';
 import './App.css';
 
 
@@ -21,6 +22,8 @@ function App() {
     <div className="App" id='contenedor'>
 
        <FormularioDeRegistro/>
+
+        {/* <Form/> */}
 
       {/* <Titulo mensaje="Bienvenido al mundo React!" 
               style= {{ fontFamily: 'Arial ', fontSize: '20px', color: 'green'}}
