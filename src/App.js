@@ -22,6 +22,8 @@ function App() {
     <div className="App" id='contenedor'>
 
        <FormularioDeRegistro/>
+      {/* <Table/> */}
+
 
         {/* <Form/> */}
 
@@ -46,7 +48,6 @@ function App() {
         {/* id= "modal"       */}
       {/* /> */}
       {/* <Carousel/> */}
-      {/* <Table/> */}
     </div>
   );
 }

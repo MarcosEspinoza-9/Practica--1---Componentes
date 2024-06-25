@@ -1,32 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Table } from "reactstrap";
-import data from "../data/data.json"; //! Importa el archivo JSON
+import data from "../data/data.json"; // Importa el archivo JSON
 import urlImagen from "../data/urlImagen.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import {faCoffee,faAppleAlt,faAnchor,faBell,faBicycle,faCar,faCloud,faCogs, faDice,faDog,faDragon,faFeather,faFish,faFlask,faGamepad, faGuitar,faHeart,faHome,faLeaf,faLemon} from "@fortawesome/free-solid-svg-icons";
 
-//! OBJETO PARA MAPEAR LOS NOMBRES DE LOS ICONOS
+//* Objeto para mapear los nombres de los iconos
 const iconMap = {faCoffee,faAppleAlt,faAnchor,faBell, faBicycle,faCar,faCloud,faCogs,faDice, faDog, faDragon,faFeather,faFish, faFlask,faGamepad,faGuitar,faHeart,faHome,faLeaf,faLemon};
 
-//! INICIALIZO EL ARREGLO VACIO
+//* Inicializo el arreglo vacío
 const DataTable = () => {
   const [tableData, setTableData] = useState([]);
   const [UrlImagen, setUrlImagen] = useState([]);
   const [modal, setModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null); //*Almacen la URL de la imagen seleccionada para mostrar en el modal.
 
-  const toggle = () => setModal(!modal);
 
+  //*Parámetro id (por defecto null)
+   const toggle = (id = null) => {
+     //* si encuentra la imagen seleccionada dentro, actualiza el estado de Url de la imagen
+    if (id) {
+      //* Busca la imagen correspondiente al id proporcionado
+      const selectedImg = UrlImagen.find(item => item.id === id);
+      //* Si se encuentra la imagen, se establece su URL en el estado selectedImage
+      setSelectedImage(selectedImg ? selectedImg.uri : null);
+    }
+    //* Cambia el estado del modal (lo abre o lo cierra)
+    setModal(!modal);
+  };
+
+
+
+   //* useEffect para cargar las URLs de las imágenes al montar el componente y actualiza el estado UrlImagen.
+   //*  setUrlImagen(urlImagen), actualiza el estado UrlImagen con los datos importados desde urlImagen.json.
   useEffect(() => {
     setUrlImagen(urlImagen);
-  }, )
-  
+  }, [])
 
-
-  //! OBTENER DATOS  POR MEDIO DE USEEFFECT. DESPUES RENDERIZA 
+   //* useEffect para cargar los datos de la tabla al montar el componente 
   useEffect(() => {
     setTableData(data);
   });
+
+
+  //*El componente DataTable utiliza useState para manejar los estados y
+  //*  useEffect para cargar datos al montar el componente.
 
   return (
     <div>
@@ -41,35 +60,30 @@ const DataTable = () => {
             <th>Button</th>
           </tr>
         </thead>
-        <tbody> 
-          {/* //! Map pasa los elementos del array (tableData "vacio"), en uno nuevo llamado item */}
+        <tbody>
+          {/* *//* tabla tiene como estado un arreglo vacio y en jsx le pasamos en un nuevo arreglo las columnas o filas que queramos */}
           {tableData.map((item) => (
-              <tr key={item.id}>
+            <tr key={item.id}>
               <th>{item.id}</th>
               <td>{item.nombre}</td>
               <td>{item.apellido}</td>
               <td>
                 <FontAwesomeIcon icon={iconMap[item.icono]} />
               </td>
-              <td> 
-              <Button color="info" onClick={toggle}>Show Image</Button>
+              <td>
+              {/* //* La función flecha no recibe parámetros, pero cuando se ejecuta, llama a toggle con item.id como argumento. 
+              //* crea un nuevo array con los resultados de llamar a una función para cada elemento del array original.*/}
+                <Button color="info" onClick={() => toggle(item.id)}>Show Image</Button>
               </td>
             </tr>
           ))}
-           </tbody>
+        </tbody>
       </Table>
 
-      <Modal isOpen={modal} toggle={toggle} >
+      <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle}>Modal title</ModalHeader>
-         <ModalBody> {/* //! Imagen Statica */}
-        {/* <img alt="Sample"src="https://picsum.photos/300/200"/> */}
-        {UrlImagen.map (item2 => (    
-             
-           <img alt="Sample" src={item2.uri} />
-          
-  
-          ))}
-
+        <ModalBody>
+          {selectedImage && <img alt="Sample" src={selectedImage} />}
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={toggle}>
@@ -80,7 +94,6 @@ const DataTable = () => {
           </Button>
         </ModalFooter>
       </Modal>
-
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
+import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button, FormFeedback  } from "reactstrap";
 import DatosModal from './DatosModal'; 
 
 const FormularioRegistro = () => {
@@ -18,12 +18,33 @@ const FormularioRegistro = () => {
     };
     const [datos, setDatos] =useState(initialState) ;
 
+    //!Estado que actualiza si la exprecion regular no se cumple
+    
+
     
     const [modalOpen, setModalOpen] = useState(false);
     const actionModal = () => setModalOpen(!modalOpen);
 
+
     const handleChange = (props) => {
         const { name, value, type, checked } = props.target;
+      
+        
+        switch (name) {
+            case 'nombre':
+            case 'apellido':
+            case 'notas':
+                var regex = /^[A-Za-z\s]+$/; //! Expresión regular que permite solo letras y espacios
+                if (!regex.test(value )) {
+                    
+                    // let errorMsg = 'Solo se permiten letras y espacios';
+                    return; //! Si el valor no coincide con la expresión regular, no se actualiza el estado
+                }
+                break;
+            default:
+                break;
+        }
+
         setDatos({
             ...datos,
             [name]: type === 'checkbox' ? checked : value
@@ -31,7 +52,7 @@ const FormularioRegistro = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         actionModal(); // Abrir el modal al enviar el formulario
     };
 
@@ -39,6 +60,7 @@ const FormularioRegistro = () => {
     //TODO: Funcion para Reiniciar los inputs
     const Reset = () => {
         setDatos(initialState);
+    
         // console.log(Reset);  
     };
 
@@ -48,11 +70,12 @@ const FormularioRegistro = () => {
             <form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label className="fw-bold" for="name">Nombre</Label>
-                    <Input id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange} />
+                    <Input  id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange} />
+                    <FormFeedback>Solo acepta letras y espacios</FormFeedback>
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="lastName">Apellido</Label>
-                    <Input id="lastName" name="apellido" placeholder="Escribe tu apellido" value={datos.apellido} onChange={handleChange} />
+                    <Input  id="lastName"  name="apellido" placeholder="Escribe tu apellido" value={datos.apellido} onChange={handleChange} />
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="Email">Email</Label>
@@ -64,7 +87,7 @@ const FormularioRegistro = () => {
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="age">Edad</Label>
-                    <Input id="age" type="number" name="edad" placeholder="8" value={datos.edad}  onChange={handleChange} />
+                    <Input id="age" type="number" name="edad" placeholder="Escribe tu edad" value={datos.edad}  onChange={handleChange} />
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
