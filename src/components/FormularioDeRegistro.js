@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button, FormFeedback  } from "reactstrap";
+import { useState, useEffect } from "react";
+import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button, FormFeedback ,Table } from "reactstrap";
 import DatosModal from './DatosModal'; 
 
 const FormularioRegistro = () => {
@@ -19,6 +19,12 @@ const FormularioRegistro = () => {
     const [datos, setDatos] =useState(initialState) ;
 
     //!Estado que actualiza si la exprecion regular no se cumple
+
+
+    //* Estado para mostrar los datos ingresados
+
+    const [datosIngresados, setDatosIngresados] = useState([]);
+   
     
 
     
@@ -27,6 +33,16 @@ const FormularioRegistro = () => {
 
 
     const handleChange = (props) => {
+        //* props.target: Es una referencia al elemento del DOM que disparó el evento. 
+        //*En eventos de formulario (como onChange en un input), target se refiere al elemento HTML en sí mismo.
+        //* Esto es llamado desestructuración de objetos en JavaScript para extraer propiedades específicas de un objeto
+        //? <Input  id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange}   required />
+        // EJEMPLO
+        // name: "nombre"
+        // value: El valor actual del input, por ejemplo, "Juan"
+        // type: "text"
+        // checked: undefined (ya que no es un checkbox o radio button)
+       
         const { name, value, type, checked } = props.target;
       
         
@@ -44,16 +60,42 @@ const FormularioRegistro = () => {
             default:
                 break;
         }
+         // Crear un nuevo registro con los datos actuales del formulario
+  
 
+        //*  Explicacion
+        //? si el tipo de entrada (type) es 'checkbox'. Si es así, utiliza el valor de checked 
+        //? (que indica si el checkbox está marcado o no). De lo contrario, utiliza el valor normal (value) del campo de entrada.
         setDatos({
+            //!actualiza el estado datos con los nuevos valores del formulario. 
             ...datos,
             [name]: type === 'checkbox' ? checked : value
         });
+
     };
 
     const handleSubmit = (e) => {
         e.preventDefault(); 
         actionModal(); // Abrir el modal al enviar el formulario
+    };
+
+
+    //* Nueva funcion para guardar en la tabla
+    const SaveDataTable = () => {
+        //! creo un nuevo objeto
+        //! solamente copeo los datos de un arreglo a otro con todos sus campos (nombre, apellido.etc...)
+        const nuevoRegistro = {  datosIngresados , ...datos  };
+
+        //! el operador ...  asegura que todos los registros previos se mantengan en el nuevo array 
+        //! junto con el nuevo registro.
+        //! 
+        setDatosIngresados((estadoAnterior) => [...estadoAnterior, nuevoRegistro]);
+
+        //*nuevoRegistro es el nuevo registro que queremos agregar al array ya existente y asi sucesivamente
+         
+        //* estadoAnterior Este objeto contiene los datos del formulario que se han ingresado y queremos guardar.
+      
+       
     };
 
     
@@ -70,7 +112,7 @@ const FormularioRegistro = () => {
             <form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label className="fw-bold" for="name">Nombre</Label>
-                    <Input  id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange} />
+                    <Input  id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange}   required />
                     <FormFeedback>Solo acepta letras y espacios</FormFeedback>
                 </FormGroup>
                 <FormGroup>
@@ -133,7 +175,47 @@ const FormularioRegistro = () => {
                 </FormGroup>
                 <button type="submit" className="btn btn-primary">Mostrar</button>
                 <Button type="button" color="secondary" onClick={Reset} className="ms-2">Reiniciar</Button>
+                <Button color="success" size="sm" onClick={SaveDataTable} > Guardar </Button>
+                
             </form>
+
+          <div  id="datosRegistrados">
+       
+        <Table >
+          <thead striped>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>correo</th>
+              <th>contraseña</th>
+              <th>edad</th>
+              <th>Genero</th>
+              <th>Escolaridad</th>
+              <th>Notas</th>
+              <th>Fecha</th>
+            </tr>
+          </thead>
+          <tbody>
+          {datosIngresados.map((dato, index) => (
+                            <tr key={index}>
+                                <th scope="row">{index + 1}</th>
+                                <td>{dato.nombre}</td>
+                                <td>{dato.apellido}</td>
+                                <td>{dato.email}</td>
+                                <td>{dato.password}</td>
+                                <td>{dato.edad}</td>
+                                <td>{dato.genero}</td>
+                                <td>{dato.rol}</td>
+                                <td>{dato.notas}</td>
+                                <td>{dato.fechaRegistro}</td>
+                            </tr>
+                        ))}
+          </tbody>
+        </Table>
+
+        </div>
+
             
 
             <DatosModal isOpen={modalOpen} toggle={actionModal} datos={datos} />

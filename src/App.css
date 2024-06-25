@@ -1,15 +1,23 @@
 .App {
   text-align: center;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  align-items: start;
+  margin: 10px ;
 }
 
 
 #contenedor{
-  background-color: #2ed03e;
+  background-color: #c4e6c7;
+  background-image: url(../src/img/softwareland.png);
+  background-repeat: no-repeat;
+  background-position: 700px 350px;
 }
 
+#datosRegistrados{
+  display: flex;
+  flex-direction: column;
+}
 
 
 

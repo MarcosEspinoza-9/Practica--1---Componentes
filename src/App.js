@@ -13,6 +13,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Table from './components/Table';
 import FormularioDeRegistro from './components/FormularioDeRegistro';
 import Form from './components/Form';
+import GuardarRegistro from './components/GuardarRegistro';
 import './App.css';
 
 
@@ -22,6 +23,8 @@ function App() {
     <div className="App" id='contenedor'>
 
        <FormularioDeRegistro/>
+       <GuardarRegistro/>
+
       {/* <Table/> */}
 
 
