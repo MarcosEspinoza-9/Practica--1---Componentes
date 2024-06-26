@@ -1,6 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
-import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button, FormFeedback ,Table } from "reactstrap";
+import { useState } from "react";
+import { FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter, Button, FormFeedback, Table } from "reactstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash, faUserPen } from "@fortawesome/free-solid-svg-icons";
+import EditModal from './EditarDatosModal';
 import DatosModal from './DatosModal'; 
 
 const FormularioRegistro = () => {
@@ -16,22 +19,13 @@ const FormularioRegistro = () => {
         notas: '',
         fechaRegistro: ''
     };
-    const [datos, setDatos] =useState(initialState) ;
 
-    //!Estado que actualiza si la exprecion regular no se cumple
-
-
-    //* Estado para mostrar los datos ingresados
-
+    const [datos, setDatos] = useState(initialState);
     const [datosIngresados, setDatosIngresados] = useState([]);
-   
-    
-
-    
     const [modalOpen, setModalOpen] = useState(false);
+    const [editingData, setEditingData] = useState(null);
+
     const actionModal = () => setModalOpen(!modalOpen);
-
-
     const handleChange = (props) => {
         //* props.target: Es una referencia al elemento del DOM que disparó el evento. 
         //*En eventos de formulario (como onChange en un input), target se refiere al elemento HTML en sí mismo.
@@ -71,6 +65,7 @@ const FormularioRegistro = () => {
             ...datos,
             [name]: type === 'checkbox' ? checked : value
         });
+        
 
     };
 
@@ -82,21 +77,35 @@ const FormularioRegistro = () => {
 
     //* Nueva funcion para guardar en la tabla
     const SaveDataTable = () => {
-        //! creo un nuevo objeto
-        //! solamente copeo los datos de un arreglo a otro con todos sus campos (nombre, apellido.etc...)
-        const nuevoRegistro = {  datosIngresados , ...datos  };
 
-        //! el operador ...  asegura que todos los registros previos se mantengan en el nuevo array 
+
+        //! creo un nuevo objeto
+        //! id es una propiedad del objeto nuevoRegistro.
+        //!  Esto asegura que cada nuevo registro tiene un id único y secuencial.
+        const nuevoRegistro = {
+            id: datosIngresados.length + 1,
+            ...datos
+         };
+        //! solamente copeo los datos de un arreglo a otro con todos sus campos (nombre, apellido.etc...)
+        //  nuevoRegistro = {  datosIngresados , ...datos  };
+
+        //! el operador ...(Propagacion)  asegura que todos los registros previos se mantengan en el nuevo array 
         //! junto con el nuevo registro.
-        //! 
         setDatosIngresados((estadoAnterior) => [...estadoAnterior, nuevoRegistro]);
 
         //*nuevoRegistro es el nuevo registro que queremos agregar al array ya existente y asi sucesivamente
-         
         //* estadoAnterior Este objeto contiene los datos del formulario que se han ingresado y queremos guardar.
-      
-       
+
     };
+
+
+    //* Eliminar por id registro nuevo 
+    const Delete = (id) => {
+        //* filter crea un nuevo array con todos los elementos de la condicion 
+        //* para cada registro en dato ingresaado se verifica si se cumple la condicion
+        //*Si registro.id es diferente del id, el registro se mantiene en el nuevo array y si es igual se excluye
+        setDatosIngresados(datosIngresados.filter((registro) => registro.id != id));
+    }
 
     
     //TODO: Funcion para Reiniciar los inputs
@@ -106,46 +115,54 @@ const FormularioRegistro = () => {
         // console.log(Reset);  
     };
 
+
+    //*Actualizar datos del segundo modal
+    const updateData = (updatedData) => {
+        const updatedList = datosIngresados.map((dato) => (dato.id === updatedData.id ? updatedData : dato));
+        setDatosIngresados(updatedList);
+        setEditingData(null);
+    };
+
     return (
         <div className="form-container">
             <h1>Formulario de Registro</h1>
             <form onSubmit={handleSubmit}>
                 <FormGroup>
                     <Label className="fw-bold" for="name">Nombre</Label>
-                    <Input  id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre}  onChange={handleChange}   required />
+                    <Input id="name" name="nombre" placeholder="Escribe tu nombre" value={datos.nombre} onChange={handleChange} required />
                     <FormFeedback>Solo acepta letras y espacios</FormFeedback>
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="lastName">Apellido</Label>
-                    <Input  id="lastName"  name="apellido" placeholder="Escribe tu apellido" value={datos.apellido} onChange={handleChange} />
+                    <Input id="lastName" name="apellido" placeholder="Escribe tu apellido" value={datos.apellido} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="Email">Email</Label>
-                    <Input id="Email" name="email" placeholder="example@gmail.com" value={datos.email}  onChange={handleChange} />
+                    <Input id="Email" name="email" placeholder="example@gmail.com" value={datos.email} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="password">Contraseña</Label>
-                    <Input id="password" type="password" name="password" placeholder="Contraseña" value={datos.password}  onChange={handleChange} />
+                    <Input id="password" type="password" name="password" placeholder="Contraseña" value={datos.password} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="age">Edad</Label>
-                    <Input id="age" type="number" name="edad" placeholder="Escribe tu edad" value={datos.edad}  onChange={handleChange} />
+                    <Input id="age" type="number" name="edad" placeholder="Escribe tu edad" value={datos.edad} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
-                        <Input name="genero" type="radio" value="masculino" checked={datos.genero === 'masculino'}   onChange={handleChange} />
+                        <Input name="genero" type="radio" value="masculino" checked={datos.genero === 'masculino'} onChange={handleChange} required />
                         Hombre
                     </Label>
                 </FormGroup>
                 <FormGroup check>
                     <Label check>
-                        <Input name="genero" type="radio" value="femenino" checked={datos.genero === 'femenino'} onChange={handleChange} />
+                        <Input name="genero" type="radio" value="femenino" checked={datos.genero === 'femenino'} onChange={handleChange} required />
                         Mujer
                     </Label>
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="Select">Select</Label>
-                    <Input id="Select" name="rol" type="select"  value={datos.rol} onChange={handleChange}>
+                    <Input id="Select" name="rol" type="select" value={datos.rol} onChange={handleChange} required>
                         <option value="">Selecciona una opción</option>
                         <option value="Escuela">Escuela</option>
                         <option value="Secundaria">Secundaria</option>
@@ -167,39 +184,39 @@ const FormularioRegistro = () => {
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="comments">Notas</Label>
-                    <Input id="comments" name="notas" type="textarea" value={datos.notas} onChange={handleChange} />
+                    <Input id="comments" name="notas" type="textarea" value={datos.notas} onChange={handleChange} required />
                 </FormGroup>
                 <FormGroup>
                     <Label className="fw-bold" for="date">Fecha</Label>
-                    <Input id="date" type="date" name="fechaRegistro" value={datos.fechaRegistro} onChange={handleChange} />
+                    <Input id="date" type="date" name="fechaRegistro" value={datos.fechaRegistro} onChange={handleChange} required />
                 </FormGroup>
                 <button type="submit" className="btn btn-primary">Mostrar</button>
                 <Button type="button" color="secondary" onClick={Reset} className="ms-2">Reiniciar</Button>
-                <Button color="success" size="sm" onClick={SaveDataTable} > Guardar </Button>
-                
+                <Button color="success" className="ms-2" onClick={SaveDataTable}>Guardar</Button>
             </form>
 
-          <div  id="datosRegistrados">
-       
-        <Table >
-          <thead striped>
-            <tr>
-              <th>#</th>
-              <th>Nombre</th>
-              <th>Apellido</th>
-              <th>correo</th>
-              <th>contraseña</th>
-              <th>edad</th>
-              <th>Genero</th>
-              <th>Escolaridad</th>
-              <th>Notas</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody>
-          {datosIngresados.map((dato, index) => (
-                            <tr key={index}>
-                                <th scope="row">{index + 1}</th>
+            <div id="datosRegistrados">
+                <Table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Contraseña</th>
+                            <th>Edad</th>
+                            <th>Genero</th>
+                            <th>Escolaridad</th>
+                            <th>Notas</th>
+                            <th>Fecha</th>
+                            <th>Borrar</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {datosIngresados.map((dato, id) => (
+                            <tr key={id}>
+                                <th scope="row">{id + 1}</th>
                                 <td>{dato.nombre}</td>
                                 <td>{dato.apellido}</td>
                                 <td>{dato.email}</td>
@@ -209,15 +226,19 @@ const FormularioRegistro = () => {
                                 <td>{dato.rol}</td>
                                 <td>{dato.notas}</td>
                                 <td>{dato.fechaRegistro}</td>
+                                <td>
+                                    <Button className="ms-2" color="danger" size="sm" onClick={() => Delete(dato.id)}>
+                                        <FontAwesomeIcon icon={faTrash} />
+                                    </Button>
+                                </td>
+                                <td>
+                                    <EditModal datos={dato} updateData={updateData} />
+                                </td>
                             </tr>
                         ))}
-          </tbody>
-        </Table>
-
-        </div>
-
-            
-
+                    </tbody>
+                </Table>
+            </div>
             <DatosModal isOpen={modalOpen} toggle={actionModal} datos={datos} />
         </div>
     );

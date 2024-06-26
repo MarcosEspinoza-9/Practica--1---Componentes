@@ -23,7 +23,7 @@ function App() {
     <div className="App" id='contenedor'>
 
        <FormularioDeRegistro/>
-       <GuardarRegistro/>
+       {/* <GuardarRegistro/> */}
 
       {/* <Table/> */}
 
