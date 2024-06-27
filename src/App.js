@@ -14,6 +14,7 @@ import Table from './components/Table';
 import FormularioDeRegistro from './components/FormularioDeRegistro';
 import Form from './components/Form';
 import GuardarRegistro from './components/GuardarRegistro';
+import ConsultaApi from './components/ConsultaApi';
 import './App.css';
 
 
@@ -22,7 +23,8 @@ function App() {
   return (
     <div className="App" id='contenedor'>
 
-       <FormularioDeRegistro/>
+    <ConsultaApi/>
+       {/* <FormularioDeRegistro/> */}
        {/* <GuardarRegistro/> */}
 
       {/* <Table/> */}
