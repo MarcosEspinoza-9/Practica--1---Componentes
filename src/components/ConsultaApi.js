@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import { Button ,Card, CardBody , CardTitle,CardFooter, CardText, CardHeader } from "reactstrap";
+import { Button ,Card, CardBody , CardTitle,CardFooter, CardText, CardHeader , Spinner} from "reactstrap";
 
 function DatosUsuarios() {
   //* Estado para guardar el resultado de la petición
   const [data, setData] = useState(null);
+//   const [loading,setLoading] = useState(true);
 
   //* Función para hacer la petición HTTP
   const fetchData = () => {
+
+    // setLoading(true);
+
     fetch("https://random-data-api.com/api/v2/users?size=1") //*TODO: Recibe una promesa
       .then((response) => response.json()) //* Convierte la respuesta en JSON
       .then((json) => setData(json)) //* Asigna los datos JSON al estado
-      .catch((error) =>
-        console.error("NO SE PUEDE HACEFR LA PETICION GET:", error)
-      ); //! Maneja errores por consola!
+       .catch((error) => console.error("Error:", error));
+    //   setLoading(false)
   };
 
   return (
@@ -20,7 +23,8 @@ function DatosUsuarios() {
       <Button color="warning" onClick={fetchData}>
       <h4>Datos de Usuarios</h4>
       </Button>
-      {data && (
+      {/* {loading && <Spinner> Loading...</Spinner>} */}
+      {data &&  (
         <div>
           <Card body style={{width: "18rem",}}>
           <CardHeader tag="h1"> <strong>{data.first_name} {data.last_name}</strong>  </CardHeader>
