@@ -15,6 +15,7 @@ import FormularioDeRegistro from './components/FormularioDeRegistro';
 import Form from './components/Form';
 import GuardarRegistro from './components/GuardarRegistro';
 import ConsultaApi from './components/ConsultaApi';
+import ApiCerveza from './components/ApiCerveza';
 import './App.css';
 
 
@@ -24,6 +25,7 @@ function App() {
     <div className="App" id='contenedor'>
 
     <ConsultaApi/>
+    <ApiCerveza/>
        {/* <FormularioDeRegistro/> */}
        {/* <GuardarRegistro/> */}
 
